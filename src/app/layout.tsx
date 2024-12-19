@@ -1,26 +1,26 @@
-import { Providers } from '@/providers'
-import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
-import './globals.css'
+import { Providers } from '@/providers';
+import type { Metadata } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
+import './globals.css';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
   subsets: ['latin'],
-})
+});
 
 const geistMono = Geist_Mono({
   variable: '--font-geist-mono',
   subsets: ['latin'],
-})
+});
 
 export const metadata: Metadata = {
   title: 'Calendar Booking and Chat Platform',
   description: 'Book appointments and stay connected through real-time chat.',
-}
+};
 
 interface RootLayoutProps {
-  children: React.ReactNode
-  chat: React.ReactNode
+  children: React.ReactNode;
+  chat: React.ReactNode;
 }
 
 export default function RootLayout({ children, chat }: RootLayoutProps) {
@@ -37,5 +37,5 @@ export default function RootLayout({ children, chat }: RootLayoutProps) {
         </Providers>
       </body>
     </html>
-  )
+  );
 }
