@@ -41,7 +41,7 @@ export default function CalendarBody({ year, month }: CalendarBodyProps) {
     calendarCells.push(
       <div
         key={day}
-        className="flex cursor-pointer justify-center border border-gray-300 p-2"
+        className="flex cursor-pointer justify-center border border-gray-300 p-2 duration-[400ms] hover:bg-blue-100"
         onClick={() => handleDayClick(formattedDate)}
       >
         <CalendarDay day={day} isToday={isToday} />
