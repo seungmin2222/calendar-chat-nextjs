@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface CalendarEventModalProps {
   onClose: () => void;
@@ -29,6 +29,26 @@ export default function CalendarEventModal({
 
     return times;
   };
+
+  const addThirtyMinutes = (time: string): string => {
+    const [hours, mins] = time.split(':').map(Number);
+    let newHours = hours;
+    let newMins = mins + 30;
+
+    if (newMins >= 60) {
+      newMins -= 60;
+      newHours += 1;
+      if (newHours >= 24) newHours = 0;
+    }
+
+    return `${String(newHours).padStart(2, '0')}:${String(newMins).padStart(2, '0')}`;
+  };
+
+  useEffect(() => {
+    if (startTime >= endTime) {
+      setEndTime(addThirtyMinutes(startTime));
+    }
+  }, [startTime, endTime]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,7 +108,7 @@ export default function CalendarEventModal({
             />
           </div>
           <div>
-            <label className="mb-1 block font-semibold">시간 선택</label>
+            <label className="mb-1 block font-semibold">시간 선택(시작)</label>
             <select
               className="w-full rounded border border-gray-300 p-2"
               value={startTime}
@@ -106,7 +126,7 @@ export default function CalendarEventModal({
             </select>
           </div>
           <div>
-            <label className="mb-1 block font-semibold">시간 선택</label>
+            <label className="mb-1 block font-semibold">시간 선택(종료)</label>
             <select
               className="w-full rounded border border-gray-300 p-2"
               value={endTime}
