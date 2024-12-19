@@ -1,18 +1,23 @@
 import { ReactNode } from 'react';
-
 import CalendarDay from './CalendarDay';
 import CalendarWeekdaysHeader from './CalendarWeekdaysHeader';
 
-export default function CalendarBody() {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = today.getMonth();
+interface CalendarBodyProps {
+  year: number;
+  month: number;
+}
 
+export default function CalendarBody({ year, month }: CalendarBodyProps) {
   const firstDayOfMonth = new Date(year, month, 1);
   const lastDayOfMonth = new Date(year, month + 1, 0);
 
   const startDay = firstDayOfMonth.getDay();
   const totalDays = lastDayOfMonth.getDate();
+
+  const today = new Date();
+  const isCurrentMonth =
+    today.getFullYear() === year && today.getMonth() === month;
+  const todayDate = isCurrentMonth ? today.getDate() : null;
 
   const cells: ReactNode[] = [];
 
@@ -26,7 +31,8 @@ export default function CalendarBody() {
   }
 
   for (let day = 1; day <= totalDays; day++) {
-    cells.push(<CalendarDay key={day} day={day} />);
+    const isToday = todayDate === day;
+    cells.push(<CalendarDay key={day} day={day} isToday={isToday} />);
   }
 
   const remainder = cells.length % 7;
@@ -42,9 +48,16 @@ export default function CalendarBody() {
   }
 
   return (
-    <div className="w-full rounded-md bg-white p-4 shadow">
+    <div className="h-[95%] w-full rounded-md bg-white p-4 text-xl shadow">
       <CalendarWeekdaysHeader />
-      <div className="mt-2 grid grid-cols-7 gap-1">{cells}</div>
+      <div
+        className="mt-2 grid h-[95%] grid-cols-7 gap-1"
+        style={{
+          gridTemplateRows: `repeat(${Math.ceil(cells.length / 7)}, minmax(0, 1fr))`,
+        }}
+      >
+        {cells}
+      </div>
     </div>
   );
 }
