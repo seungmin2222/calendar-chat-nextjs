@@ -14,7 +14,7 @@ export default function Chat() {
     <div>
       <button
         onClick={toggleChatForm}
-        className="absolute bottom-10 right-10 rounded-lg bg-blue-500 px-4 py-2 text-white shadow-lg duration-[400ms] hover:bg-blue-600"
+        className="absolute bottom-10 right-10 rounded-lg bg-blue-600 px-4 py-2 text-white shadow-lg duration-[400ms] hover:bg-blue-700"
       >
         Chat 💬
       </button>
