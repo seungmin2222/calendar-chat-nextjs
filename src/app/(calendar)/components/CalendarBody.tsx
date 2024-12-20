@@ -2,6 +2,7 @@ import { ReactNode, useState } from 'react';
 import CalendarDay from './CalendarDay';
 import CalendarEventModal from './CalendarEventModal';
 import CalendarWeekdaysHeader from './CalendarWeekdaysHeader';
+import CalendarGrid from './CalendarGrid';
 
 interface CalendarBodyProps {
   year: number;
@@ -73,20 +74,14 @@ export default function CalendarBody({ year, month }: CalendarBodyProps) {
   };
 
   return (
-    <div className="h-[95%] w-full rounded-md bg-white p-4 text-xl shadow">
-      <CalendarWeekdaysHeader />
-      <div
-        className="mt-2 grid h-[95%] grid-cols-7 gap-1"
-        style={{
-          gridTemplateRows: `repeat(${Math.ceil(calendarCells.length / 7)}, minmax(0, 1fr))`,
-        }}
-      >
-        {calendarCells}
+    <>
+      <div className="h-[95%] w-full rounded-md bg-white p-4 text-xl shadow">
+        <CalendarWeekdaysHeader />
+        <CalendarGrid calendarCells={calendarCells} />
       </div>
-
       {isModalOpen && selectedDate && (
         <CalendarEventModal onClose={closeModal} defaultDate={selectedDate} />
       )}
-    </div>
+    </>
   );
 }
