@@ -1,3 +1,4 @@
+import { MSWComponent } from '@/mocks/MSWComponent';
 import { Providers } from '@/providers';
 import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
@@ -31,7 +32,7 @@ export default function RootLayout({ children, chat }: RootLayoutProps) {
       >
         <Providers>
           <main className="relative h-screen w-screen">
-            {children}
+            <MSWComponent>{children}</MSWComponent>
             {chat}
           </main>
         </Providers>
