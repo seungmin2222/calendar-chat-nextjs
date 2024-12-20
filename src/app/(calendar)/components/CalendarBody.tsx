@@ -1,15 +1,20 @@
 import { ReactNode, useState } from 'react';
 import CalendarDay from './CalendarDay';
 import CalendarEventModal from './CalendarEventModal';
-import CalendarWeekdaysHeader from './CalendarWeekdaysHeader';
 import CalendarGrid from './CalendarGrid';
+import CalendarWeekdaysHeader from './CalendarWeekdaysHeader';
 
 interface CalendarBodyProps {
   year: number;
   month: number;
+  today: Date;
 }
 
-export default function CalendarBody({ year, month }: CalendarBodyProps) {
+export default function CalendarBody({
+  year,
+  month,
+  today,
+}: CalendarBodyProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string>('');
 
@@ -19,7 +24,6 @@ export default function CalendarBody({ year, month }: CalendarBodyProps) {
   const startDay = firstDayOfMonth.getDay();
   const totalDays = lastDayOfMonth.getDate();
 
-  const today = new Date();
   const isCurrentMonth =
     today.getFullYear() === year && today.getMonth() === month;
   const currentDay = isCurrentMonth ? today.getDate() : null;
