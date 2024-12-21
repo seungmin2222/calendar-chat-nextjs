@@ -25,7 +25,7 @@ export default function CalendarBody({
   const [selectedEvent, setSelectedEvent] = useState<EventDataType | null>(
     null
   );
-
+  const [modalMode, setModalMode] = useState<'create' | 'update'>('create');
   const firstDayOfMonth = new Date(year, month, 1);
   const lastDayOfMonth = new Date(year, month + 1, 0);
 
@@ -100,9 +100,18 @@ export default function CalendarBody({
     setIsModalOpen(true);
   };
 
+  const handleEventEdit = (event: EventDataType) => {
+    setSelectedEvent(event);
+    setIsModalOpen(true);
+    setIsDetailModalOpen(false);
+    setModalMode('update');
+  };
+
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedDate('');
+    setSelectedEvent(null);
+    setModalMode('create');
   };
 
   const handleEventClick = (event: EventDataType) => {
@@ -110,9 +119,13 @@ export default function CalendarBody({
     setIsDetailModalOpen(true);
   };
 
+  const handleCloseAndResetDetailModal = () => {
+    setSelectedEvent(null);
+    setIsDetailModalOpen(false);
+  };
+
   const closeDetailModal = () => {
     setIsDetailModalOpen(false);
-    setSelectedEvent(null);
   };
 
   return (
@@ -121,14 +134,21 @@ export default function CalendarBody({
         <CalendarWeekdaysHeader />
         <CalendarGrid calendarCells={calendarCells} />
       </div>
-      {isModalOpen && selectedDate && (
-        <CalendarEventModal onClose={closeModal} defaultDate={selectedDate} />
+      {isModalOpen && (
+        <CalendarEventModal
+          onClose={closeModal}
+          mode={modalMode}
+          defaultDate={selectedDate}
+          defaultValues={selectedEvent}
+        />
       )}
       {isDetailModalOpen && selectedEvent && (
         <CalendarEventViewModal
           event={selectedEvent}
           isOpen={isDetailModalOpen}
           onClose={closeDetailModal}
+          onResetAndClose={handleCloseAndResetDetailModal}
+          onEdit={handleEventEdit}
           year={year}
           month={month}
         />

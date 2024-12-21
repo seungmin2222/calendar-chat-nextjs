@@ -6,6 +6,8 @@ interface ModalProps {
   event: EventDataType;
   isOpen: boolean;
   onClose: () => void;
+  onResetAndClose: () => void;
+  onEdit?: (event: EventDataType) => void;
   year: number;
   month: number;
 }
@@ -14,6 +16,8 @@ export default function CalendarEventViewModal({
   event,
   isOpen,
   onClose,
+  onResetAndClose,
+  onEdit,
   year,
   month,
 }: ModalProps) {
@@ -21,7 +25,7 @@ export default function CalendarEventViewModal({
 
   const onSuccessAction = () => {
     alert('삭제 성공');
-    onClose();
+    onResetAndClose();
   };
 
   const onErrorAction = () => {
@@ -36,7 +40,7 @@ export default function CalendarEventViewModal({
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        onClose();
+        onResetAndClose();
       }
     };
 
@@ -48,19 +52,22 @@ export default function CalendarEventViewModal({
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [isOpen, onClose]);
+  }, [isOpen, onResetAndClose]);
 
   if (!isOpen) return null;
 
   const handleBackgroundClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (e.target === e.currentTarget) {
-      onClose();
+      onResetAndClose();
     }
   };
 
   const handleEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
-    console.log('수정');
+    if (onEdit) {
+      onEdit(event);
+    }
+    onClose();
   };
 
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -80,7 +87,7 @@ export default function CalendarEventViewModal({
       >
         <button
           className="absolute right-2 top-2 text-gray-500 hover:text-gray-700"
-          onClick={onClose}
+          onClick={onResetAndClose}
         >
           &#10005;
         </button>

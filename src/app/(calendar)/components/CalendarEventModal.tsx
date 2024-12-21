@@ -1,29 +1,53 @@
 import { useEffect, useState } from 'react';
 import useCreateEventByDate from '../hooks/useCreateEventByDate';
+import useUpdateEventByDate from '../hooks/useUpdateEventByDate';
+import { EventDataType } from '../types/calendar';
 
 interface CalendarEventModalProps {
   onClose: () => void;
+  mode: 'create' | 'update';
   defaultDate: string;
+  defaultValues: EventDataType | null;
 }
 
 export default function CalendarEventModal({
   onClose,
+  mode = 'create',
   defaultDate,
+  defaultValues,
 }: CalendarEventModalProps) {
-  const [date, setDate] = useState(defaultDate);
-  const [title, setTitle] = useState('');
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [startTime, setStartTime] = useState('00:00');
-  const [endTime, setEndTime] = useState('00:30');
+  const [date, setDate] = useState(
+    mode === 'update'
+      ? `${defaultValues?.year}-${String(defaultValues?.month).padStart(2, '0')}-${String(defaultValues?.day).padStart(2, '0')}`
+      : defaultDate
+  );
+  const [title, setTitle] = useState(defaultValues?.title || '');
+  const [name, setName] = useState(defaultValues?.name || '');
+  const [description, setDescription] = useState(
+    defaultValues?.description || ''
+  );
+  const [startTime, setStartTime] = useState(
+    defaultValues?.startTime || '00:00'
+  );
+  const [endTime, setEndTime] = useState(defaultValues?.endTime || '00:30');
 
-  const mutation = useCreateEventByDate({
+  const createMutation = useCreateEventByDate({
     onSuccessAction: () => {
       alert('일정이 성공적으로 등록되었습니다.');
       onClose();
     },
     onErrorAction: () => {
       alert('일정 등록에 실패했습니다. 다시 시도해주세요.');
+    },
+  });
+
+  const updateMutation = useUpdateEventByDate({
+    onSuccessAction: () => {
+      alert('일정이 성공적으로 수정되었습니다.');
+      onClose();
+    },
+    onErrorAction: () => {
+      alert('일정 수정에 실패했습니다. 다시 시도해주세요.');
     },
   });
 
@@ -71,15 +95,20 @@ export default function CalendarEventModal({
       name,
       description,
       year,
-      month: month,
+      month,
       day,
       startTime,
       endTime,
     };
 
-    mutation.mutate(eventData);
-
-    onClose();
+    if (mode === 'create') {
+      createMutation.mutate(eventData);
+    } else {
+      updateMutation.mutate({
+        id: defaultValues!.id,
+        updateEvent: eventData,
+      });
+    }
   };
 
   return (
@@ -89,7 +118,9 @@ export default function CalendarEventModal({
         onClick={onClose}
       />
       <div className="z-10 w-full max-w-md rounded-md bg-white p-6 shadow-lg">
-        <h2 className="mb-4 text-xl font-bold">일정 등록</h2>
+        <h2 className="mb-4 text-xl font-bold">
+          {mode === 'create' ? '일정 등록' : '일정 수정'}
+        </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="mb-1 block font-semibold">제목</label>

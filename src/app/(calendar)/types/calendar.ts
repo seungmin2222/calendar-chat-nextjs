@@ -14,6 +14,15 @@ export interface CreateEventType {
   endTime: string;
 }
 
+export interface UpdateEventParams {
+  id: string;
+  updateEvent: CreateEventType;
+}
+
+export interface UpdateEventBody {
+  requests: CreateEventType;
+}
+
 export interface EventDataType extends CreateEventType {
   id: string;
 }
