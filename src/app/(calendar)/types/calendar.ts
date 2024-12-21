@@ -3,8 +3,7 @@ export interface GetEventsByDateProps {
   month: number;
 }
 
-export interface eventDataType {
-  id: string;
+export interface CreateEventType {
   title: string;
   name: string;
   description: string;
@@ -13,6 +12,10 @@ export interface eventDataType {
   day: number;
   startTime: string;
   endTime: string;
+}
+
+export interface eventDataType extends CreateEventType {
+  id: string;
 }
 
 export interface responseType {

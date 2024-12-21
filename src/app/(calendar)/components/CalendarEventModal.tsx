@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import useCreateEventByDate from '../hooks/useCreateEventByDate';
 
 interface CalendarEventModalProps {
   onClose: () => void;
@@ -12,9 +13,19 @@ export default function CalendarEventModal({
   const [date, setDate] = useState(defaultDate);
   const [title, setTitle] = useState('');
   const [name, setName] = useState('');
-  const [details, setDetails] = useState('');
+  const [description, setDescription] = useState('');
   const [startTime, setStartTime] = useState('00:00');
   const [endTime, setEndTime] = useState('00:30');
+
+  const mutation = useCreateEventByDate({
+    onSuccessAction: () => {
+      alert('일정이 성공적으로 등록되었습니다.');
+      onClose();
+    },
+    onErrorAction: () => {
+      alert('일정 등록에 실패했습니다. 다시 시도해주세요.');
+    },
+  });
 
   const generateTimeOptions = (): string[] => {
     const times: string[] = [];
@@ -53,9 +64,20 @@ export default function CalendarEventModal({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    console.log(
-      `Submitted Information:\nTitle: ${title}\nName: ${name}\nDetails: ${details}\nSelected Date: ${date}\nSelected startTime: ${startTime} \nSelected endTime: ${endTime}`
-    );
+    const [year, month, day] = date.split('-').map(Number);
+
+    const eventData = {
+      title,
+      name,
+      description,
+      year,
+      month: month,
+      day,
+      startTime,
+      endTime,
+    };
+
+    mutation.mutate(eventData);
 
     onClose();
   };
@@ -93,8 +115,8 @@ export default function CalendarEventModal({
             <label className="mb-1 block font-semibold">상세 내용</label>
             <textarea
               className="h-24 w-full rounded border border-gray-300 p-2"
-              value={details}
-              onChange={(e) => setDetails(e.target.value)}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
             />
           </div>
           <div>

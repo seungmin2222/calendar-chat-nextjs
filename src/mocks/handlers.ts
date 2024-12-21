@@ -1,3 +1,4 @@
+import { CreateEventType } from '@/app/(calendar)/types/calendar';
 import { http, HttpResponse } from 'msw';
 import { db } from './db';
 
@@ -49,6 +50,40 @@ export const handlers = [
     } catch (error) {
       console.error('MSW Handler Error:', error);
       return new HttpResponse(null, { status: 500 });
+    }
+  }),
+  http.post('/events', async ({ request }) => {
+    try {
+      const eventData = (await request.json()) as CreateEventType;
+
+      if (eventData) {
+        db.event.create({
+          title: eventData.title,
+          name: eventData.name,
+          description: eventData.description || '',
+          year: eventData.year,
+          month: eventData.month,
+          day: eventData.day,
+          startTime: eventData.startTime,
+          endTime: eventData.endTime,
+        });
+      }
+
+      return HttpResponse.json(
+        {
+          status: 'success',
+        },
+        { status: 201 }
+      );
+    } catch (error) {
+      console.error('MSW Handler Error:', error);
+      return new HttpResponse(
+        JSON.stringify({
+          status: 'error',
+          message: '서버 에러가 발생했습니다.',
+        }),
+        { status: 500 }
+      );
     }
   }),
 ];
