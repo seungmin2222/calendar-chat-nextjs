@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import CalendarBody from './components/CalendarBody';
 import CalendarHeader from './components/CalendarHeader';
+import { useGetEventsByDate } from './hooks/useGetEventsByDate';
 
 export default function Home() {
   const today = new Date();
@@ -12,6 +13,8 @@ export default function Home() {
     year: currentDate.getFullYear(),
     month: currentDate.getMonth(),
   };
+
+  const { data } = useGetEventsByDate({ year, month });
 
   const handlePrevMonth = () => {
     setCurrentDate(new Date(year, month - 1, 1));
@@ -29,7 +32,14 @@ export default function Home() {
         onPrevMonth={handlePrevMonth}
         onNextMonth={handleNextMonth}
       />
-      <CalendarBody year={year} month={month} today={today} />
+      {data && (
+        <CalendarBody
+          year={year}
+          month={month}
+          today={today}
+          currentEvent={data}
+        />
+      )}
     </div>
   );
 }

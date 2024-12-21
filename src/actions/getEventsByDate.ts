@@ -1,11 +1,13 @@
-import { GetEventsByDateProps } from '@/app/(calendar)/types/calendar';
+import {
+  GetEventsByDateProps,
+  responseType,
+} from '@/app/(calendar)/types/calendar';
 
 export const getEventsByDate = async ({
   year,
   month,
 }: GetEventsByDateProps) => {
-  const getEventsURL = process.env.NEXT_PUBLIC_EVENTS_API_URL;
-  const url = `${getEventsURL}/?year=${year}&month=${month + 1}`;
+  const url = `/events?year=${year}&month=${month + 1}`;
 
   try {
     const response = await fetch(url, {
@@ -19,7 +21,7 @@ export const getEventsByDate = async ({
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const data = await response.json();
+    const data: responseType = await response.json();
 
     return data;
   } catch (error) {

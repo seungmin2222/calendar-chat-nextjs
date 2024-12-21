@@ -8,7 +8,7 @@ export default function CalendarDay({ day, isToday }: CalendarDayProps) {
     <div
       className={`flex h-fit justify-center ${
         isToday
-          ? 'h-8 w-8 place-items-center rounded-full bg-blue-200 font-bold text-blue-700'
+          ? 'h-8 w-8 place-items-center self-center rounded-full bg-blue-200 font-bold text-blue-700'
           : ''
       }`}
     >
