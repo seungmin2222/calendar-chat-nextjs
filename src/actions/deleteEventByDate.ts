@@ -1,4 +1,4 @@
-export const deleteEventByDate = async (id: string, month: number) => {
+export const deleteEventByDate = async (id: string) => {
   const url = `/events?id=${id}`;
 
   try {
