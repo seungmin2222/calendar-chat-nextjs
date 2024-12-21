@@ -2,7 +2,7 @@ import { http, HttpResponse } from 'msw';
 import { db } from './db';
 
 export const handlers = [
-  http.get('https://api.calendar.com/events', ({ request }) => {
+  http.get('/events', ({ request }) => {
     const url = new URL(request.url);
 
     const year = Number(url.searchParams.get('year'));
