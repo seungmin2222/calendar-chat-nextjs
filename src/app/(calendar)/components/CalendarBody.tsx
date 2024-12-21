@@ -1,5 +1,5 @@
 import { ReactNode, useState } from 'react';
-import { eventDataType, responseType } from '../types/calendar';
+import { EventDataType, ResponseType } from '../types/calendar';
 import CalendarDay from './CalendarDay';
 import CalendarEventModal from './CalendarEventModal';
 import CalendarGrid from './CalendarGrid';
@@ -10,7 +10,7 @@ interface CalendarBodyProps {
   year: number;
   month: number;
   today: Date;
-  currentEvent: responseType['data'];
+  currentEvent: ResponseType['data'];
 }
 
 export default function CalendarBody({
@@ -22,7 +22,7 @@ export default function CalendarBody({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState('');
-  const [selectedEvent, setSelectedEvent] = useState<eventDataType | null>(
+  const [selectedEvent, setSelectedEvent] = useState<EventDataType | null>(
     null
   );
 
@@ -52,7 +52,7 @@ export default function CalendarBody({
     const formattedDate = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
 
     const matchingEvents = currentEvent?.events.filter(
-      (event: eventDataType) => event.day === day
+      (event: EventDataType) => event.day === day
     );
 
     calendarCells.push(
@@ -63,7 +63,7 @@ export default function CalendarBody({
       >
         <CalendarDay day={day} isToday={isToday} />
         <div className="overflow-y-auto">
-          {matchingEvents?.map((event: eventDataType) => (
+          {matchingEvents?.map((event: EventDataType) => (
             <div
               key={event.id}
               className="mt-1 flex gap-1 rounded-md bg-slate-200 p-1 text-sm duration-[400ms] hover:bg-blue-300"
@@ -105,7 +105,7 @@ export default function CalendarBody({
     setSelectedDate('');
   };
 
-  const handleEventClick = (event: eventDataType) => {
+  const handleEventClick = (event: EventDataType) => {
     setSelectedEvent(event);
     setIsDetailModalOpen(true);
   };

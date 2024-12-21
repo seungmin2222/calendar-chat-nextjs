@@ -1,9 +1,9 @@
 import React, { useEffect, useRef } from 'react';
 import useDeleteEventsByDate from '../hooks/useDeleteEventByDate';
-import { eventDataType } from '../types/calendar';
+import { EventDataType } from '../types/calendar';
 
 interface ModalProps {
-  event: eventDataType;
+  event: EventDataType;
   isOpen: boolean;
   onClose: () => void;
   year: number;

@@ -1,6 +1,6 @@
 import {
   GetEventsByDateProps,
-  responseType,
+  ResponseType,
 } from '@/app/(calendar)/types/calendar';
 
 export const getEventsByDate = async ({
@@ -21,7 +21,7 @@ export const getEventsByDate = async ({
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
-    const data: responseType = await response.json();
+    const data: ResponseType = await response.json();
 
     return data;
   } catch (error) {

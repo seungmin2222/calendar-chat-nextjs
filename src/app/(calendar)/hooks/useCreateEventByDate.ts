@@ -2,12 +2,12 @@
 
 import { createEventByDate } from '@/actions/creatEventByDate';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { CreateEventType, mutationArgs } from '../types/calendar';
+import { CreateEventType, MutationArgs } from '../types/calendar';
 
 export default function useCreateEventByDate({
   onSuccessAction,
   onErrorAction,
-}: mutationArgs) {
+}: MutationArgs) {
   const queryClient = useQueryClient();
 
   return useMutation({

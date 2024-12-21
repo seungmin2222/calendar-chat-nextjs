@@ -1,8 +1,8 @@
-import { eventDataType } from '../types/calendar';
+import { EventDataType } from '../types/calendar';
 
 interface EventItemProps {
-  event: eventDataType;
-  onClick: (event: eventDataType) => void;
+  event: EventDataType;
+  onClick: (event: EventDataType) => void;
 }
 
 const CalendarEventItem: React.FC<EventItemProps> = ({ event, onClick }) => {

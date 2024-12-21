@@ -14,16 +14,16 @@ export interface CreateEventType {
   endTime: string;
 }
 
-export interface eventDataType extends CreateEventType {
+export interface EventDataType extends CreateEventType {
   id: string;
 }
 
-export interface responseType {
-  data: { events: eventDataType[] };
+export interface ResponseType {
+  data: { events: EventDataType[] };
   status: string;
 }
 
-export interface mutationArgs {
+export interface MutationArgs {
   onSuccessAction?: () => void;
   onErrorAction?: () => void;
 }

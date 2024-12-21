@@ -2,7 +2,7 @@
 
 import { deleteEventByDate } from '@/actions/deleteEventByDate';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { mutationArgs } from '../types/calendar';
+import { MutationArgs } from '../types/calendar';
 
 interface DeleteEventParams {
   id: string;
@@ -10,10 +10,10 @@ interface DeleteEventParams {
   month: number;
 }
 
-export default function useDeleteEventsByDate({
+export default function useDeleteEventByDate({
   onSuccessAction,
   onErrorAction,
-}: mutationArgs) {
+}: MutationArgs) {
   const queryClient = useQueryClient();
 
   return useMutation({
