@@ -9,7 +9,7 @@ export const handlers = [
     const month = Number(url.searchParams.get('month'));
 
     try {
-      const selectEvents = db.event.findMany({
+      const selectedEvents = db.event.findMany({
         where: {
           year: {
             equals: year,
@@ -22,7 +22,29 @@ export const handlers = [
 
       return HttpResponse.json({
         status: 'success',
-        data: { events: selectEvents },
+        data: { events: selectedEvents },
+      });
+    } catch (error) {
+      console.error('MSW Handler Error:', error);
+      return new HttpResponse(null, { status: 500 });
+    }
+  }),
+  http.delete('/events', ({ request }) => {
+    const url = new URL(request.url);
+
+    const id = url.searchParams.get('id') as string;
+
+    try {
+      db.event.delete({
+        where: {
+          id: {
+            equals: id,
+          },
+        },
+      });
+
+      return HttpResponse.json({
+        status: 'success',
       });
     } catch (error) {
       console.error('MSW Handler Error:', error);

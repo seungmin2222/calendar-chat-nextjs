@@ -1,18 +1,37 @@
 import React, { useEffect, useRef } from 'react';
+import useDeleteEventsByDate from '../hooks/useDeleteEventByDate';
 import { eventDataType } from '../types/calendar';
 
 interface ModalProps {
   event: eventDataType;
   isOpen: boolean;
   onClose: () => void;
+  year: number;
+  month: number;
 }
 
 export default function CalendarEventViewModal({
   event,
   isOpen,
   onClose,
+  year,
+  month,
 }: ModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
+
+  const onSuccessAction = () => {
+    alert('삭제 성공');
+    onClose();
+  };
+
+  const onErrorAction = () => {
+    console.log('삭제 실패');
+  };
+
+  const mutation = useDeleteEventsByDate({
+    onSuccessAction,
+    onErrorAction,
+  });
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -39,13 +58,23 @@ export default function CalendarEventViewModal({
     }
   };
 
+  const handleEdit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    console.log('수정');
+  };
+
+  const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    mutation.mutate({ id: event.id, year, month });
+  };
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
       onClick={handleBackgroundClick}
     >
       <div
-        className="relative w-11/12 max-w-md rounded-lg bg-white p-6 shadow-lg focus:outline-none"
+        className="relative flex w-11/12 max-w-md flex-col gap-3 rounded-lg bg-white p-6 shadow-lg focus:outline-none"
         ref={modalRef}
         tabIndex={-1}
       >
@@ -70,6 +99,20 @@ export default function CalendarEventViewModal({
         <p>
           <strong>Time:</strong> {event.startTime} - {event.endTime}
         </p>
+        <div className="mt-4 flex justify-between">
+          <button
+            className="duration-400 flex w-[45%] justify-center rounded bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+            onClick={handleDelete}
+          >
+            삭제
+          </button>
+          <button
+            className="duration-400 flex w-[45%] justify-center rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600"
+            onClick={handleEdit}
+          >
+            수정
+          </button>
+        </div>
       </div>
     </div>
   );

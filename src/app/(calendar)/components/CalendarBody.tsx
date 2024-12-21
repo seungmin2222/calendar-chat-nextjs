@@ -129,6 +129,8 @@ export default function CalendarBody({
           event={selectedEvent}
           isOpen={isDetailModalOpen}
           onClose={closeDetailModal}
+          year={year}
+          month={month}
         />
       )}
     </>

@@ -19,3 +19,8 @@ export interface responseType {
   data: { events: eventDataType[] };
   status: string;
 }
+
+export interface mutationArgs {
+  onSuccessAction?: () => void;
+  onErrorAction?: () => void;
+}
