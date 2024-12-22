@@ -4,17 +4,34 @@ import { useEffect, useState } from 'react';
 
 export const MSWComponent = ({ children }: { children: React.ReactNode }) => {
   const [mswReady, setMswReady] = useState(false);
+
   useEffect(() => {
-    const init = async () => {
-      const initMsw = await import('../index').then((res) => res.initMsw);
-      await initMsw();
-      setMswReady(true);
+    const setupMock = async () => {
+      if (typeof window === 'undefined') {
+        return;
+      }
+
+      if (process.env.NEXT_PUBLIC_API_MOCKING !== 'enabled') {
+        setMswReady(true);
+        return;
+      }
+
+      try {
+        const { initMsw } = await import('@/mocks/browser');
+        await initMsw();
+        setMswReady(true);
+      } catch (error) {
+        console.error('Failed to initialize MSW:', error);
+        setMswReady(true);
+      }
     };
 
-    if (!mswReady) {
-      init();
-    }
-  }, [mswReady]);
+    setupMock();
+  }, []);
+
+  if (!mswReady) {
+    return null;
+  }
 
   return <>{children}</>;
 };
