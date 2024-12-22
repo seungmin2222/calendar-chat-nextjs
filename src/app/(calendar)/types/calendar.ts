@@ -27,6 +27,10 @@ export interface EventDataType extends CreateEventType {
   id: string;
 }
 
+export interface EventDataObjectType {
+  event: EventDataType;
+}
+
 export interface ResponseType {
   data: { events: EventDataType[] };
   status: string;
