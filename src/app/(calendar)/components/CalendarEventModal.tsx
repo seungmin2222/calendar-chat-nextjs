@@ -117,7 +117,7 @@ export default function CalendarEventModal({
         className="absolute inset-0 bg-black bg-opacity-50"
         onClick={onClose}
       />
-      <div className="z-10 w-full max-w-md rounded-md bg-white p-6 shadow-lg">
+      <div className="z-10 w-full max-w-md rounded-2xl bg-white p-6 shadow-lg">
         <h2 className="mb-4 text-xl font-bold">
           {mode === 'create' ? '일정 등록' : '일정 수정'}
         </h2>

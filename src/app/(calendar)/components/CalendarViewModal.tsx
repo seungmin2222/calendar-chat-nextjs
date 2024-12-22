@@ -81,7 +81,7 @@ export default function CalendarEventViewModal({
       onClick={handleBackgroundClick}
     >
       <div
-        className="relative flex w-11/12 max-w-md flex-col gap-3 rounded-lg bg-white p-6 shadow-lg focus:outline-none"
+        className="relative flex w-11/12 max-w-md flex-col gap-3 rounded-2xl bg-white p-6 shadow-lg focus:outline-none"
         ref={modalRef}
         tabIndex={-1}
       >
