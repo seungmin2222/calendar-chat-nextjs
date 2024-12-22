@@ -7,12 +7,21 @@ import { db } from './db';
 
 export const handlers = [
   http.get('/events', ({ request }) => {
-    const url = new URL(request.url);
-
-    const year = Number(url.searchParams.get('year'));
-    const month = Number(url.searchParams.get('month'));
-
     try {
+      const url = new URL(request.url);
+
+      const year = Number(url.searchParams.get('year'));
+      const month = Number(url.searchParams.get('month'));
+
+      if (!year && !month) {
+        const allEvents = db.event.getAll();
+
+        return HttpResponse.json({
+          status: 'success',
+          data: { events: allEvents },
+        });
+      }
+
       const selectedEvents = db.event.findMany({
         where: {
           year: {
