@@ -2,8 +2,10 @@ import {
   CreateEventType,
   UpdateEventBody,
 } from '@/app/(calendar)/types/calendar';
-import { http, HttpResponse } from 'msw';
+import { http, HttpResponse, ws } from 'msw';
 import { db } from './db';
+
+const chat = ws.link('wss://chat.example.com');
 
 export const handlers = [
   http.get('/events', ({ request }) => {
@@ -148,5 +150,54 @@ export const handlers = [
         { status: 500 }
       );
     }
+  }),
+  chat.addEventListener('connection', ({ client }) => {
+    console.log('새로운 클라이언트가 연결되었습니다.');
+
+    client.addEventListener('message', (event) => {
+      try {
+        const data =
+          typeof event.data === 'string'
+            ? event.data
+            : event.data instanceof Blob
+              ? JSON.stringify(event.data)
+              : JSON.stringify(event.data);
+
+        const messageData = JSON.parse(data);
+        const timestamp = new Date().toISOString();
+
+        const broadcastMessage = {
+          id: crypto.randomUUID(),
+          ...messageData,
+          timestamp,
+        };
+
+        client.send(
+          JSON.stringify({
+            ...broadcastMessage,
+            sender: 'me',
+          })
+        );
+
+        chat.broadcastExcept(
+          client,
+          JSON.stringify({
+            ...broadcastMessage,
+            sender: 'other',
+          })
+        );
+      } catch (error) {
+        console.error('메시지 처리 중 오류 발생:', error);
+        client.send(
+          JSON.stringify({
+            id: crypto.randomUUID(),
+            type: 'system',
+            content: '메시지 처리 중 오류가 발생했습니다.',
+            sender: 'system',
+            timestamp: new Date().toISOString(),
+          })
+        );
+      }
+    });
   }),
 ];

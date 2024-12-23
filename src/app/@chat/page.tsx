@@ -16,9 +16,12 @@ export default function Chat() {
         onClick={toggleChatForm}
         className="absolute bottom-10 right-10 rounded-lg bg-blue-600 px-4 py-2 text-white shadow-lg duration-[400ms] hover:bg-blue-700"
       >
-        Chat 💬
+        {isChatFormVisible ? 'Close 🔒' : 'Chat 💬'}
       </button>
-      {isChatFormVisible && <ChatForm />}
+      <ChatForm
+        isOpen={isChatFormVisible}
+        onClose={() => setIsChatFormVisible(false)}
+      />
     </div>
   );
 }
