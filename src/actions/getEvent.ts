@@ -1,14 +1,14 @@
 import { ResponseType } from '@/app/(calendar)/types/calendar';
 
-interface GetAllEventParams {
+interface GetEventParams {
   page?: number;
   limit?: number;
 }
 
-export const getAllEvent = async ({
+export const getEvent = async ({
   page = 1,
   limit = 10,
-}: GetAllEventParams = {}) => {
+}: GetEventParams = {}) => {
   const url = `/events?page=${page}&limit=${limit}`;
 
   try {

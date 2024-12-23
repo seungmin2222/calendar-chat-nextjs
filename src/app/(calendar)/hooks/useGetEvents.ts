@@ -1,26 +1,26 @@
 'use client';
 
-import { getAllEvent } from '@/actions/getAllEvent';
+import { getEvent } from '@/actions/getEvent';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 interface EventsOptions {
-  page: number;
+  page?: number;
   limit: number;
 }
 
-export const useGetAllEvents = (options: EventsOptions = { limit: 10 }) => {
+export const useGetEvents = (options: EventsOptions) => {
   return useInfiniteQuery({
     queryKey: ['events', options],
     queryFn: async ({ pageParam = 1 }) => {
-      const res = await getAllEvent({
+      const res = await getEvent({
         page: pageParam,
         limit: options.limit,
       });
       return res.data;
     },
-    getNextPageParam: (lastPage, allPages) => {
+    getNextPageParam: (lastPage, pages) => {
       if (lastPage.events.length < (options.limit ?? 10)) return undefined;
-      return allPages.length + 1;
+      return pages.length + 1;
     },
     initialPageParam: 1,
   });

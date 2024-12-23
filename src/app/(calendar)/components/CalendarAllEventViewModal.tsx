@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { useGetAllEvents } from '../hooks/useGetAllEvents';
+import { useGetEvents } from '../hooks/useGetEvents';
 import CalendarEventCard from './CalendarEventCard';
 
 interface ModalProps {
@@ -12,7 +12,7 @@ export default function CalendarAllEventViewModal({
   isOpen,
   onClose,
 }: ModalProps) {
-  const { data, refetch, fetchNextPage, hasNextPage } = useGetAllEvents({
+  const { data, refetch, fetchNextPage, hasNextPage } = useGetEvents({
     limit: 10,
   });
 
