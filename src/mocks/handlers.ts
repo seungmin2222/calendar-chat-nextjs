@@ -14,13 +14,18 @@ export const handlers = [
 
       const year = Number(url.searchParams.get('year'));
       const month = Number(url.searchParams.get('month'));
+      const page = Number(url.searchParams.get('page'));
+      const limit = Number(url.searchParams.get('limit'));
 
       if (!year && !month) {
-        const allEvents = db.event.getAll();
+        const getEvents = db.event.findMany({
+          take: limit,
+          skip: (page - 1) * limit,
+        });
 
         return HttpResponse.json({
           status: 'success',
-          data: { events: allEvents },
+          data: { events: getEvents },
         });
       }
 

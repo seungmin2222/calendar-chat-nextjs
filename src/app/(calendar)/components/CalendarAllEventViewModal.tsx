@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import { useGetAllEvents } from '../hooks/useGetAllEvents';
 import CalendarEventCard from './CalendarEventCard';
 
@@ -11,7 +12,9 @@ export default function CalendarAllEventViewModal({
   isOpen,
   onClose,
 }: ModalProps) {
-  const { data, refetch } = useGetAllEvents();
+  const { data, refetch, fetchNextPage, hasNextPage } = useGetAllEvents({
+    limit: 10,
+  });
 
   useEffect(() => {
     if (isOpen) {
@@ -25,6 +28,9 @@ export default function CalendarAllEventViewModal({
     e.stopPropagation();
   };
 
+  const pages = data?.pages || [];
+  const allEvents = pages.flatMap((page) => page.events);
+
   return (
     <div
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
@@ -34,7 +40,7 @@ export default function CalendarAllEventViewModal({
         className="relative h-[70%] w-[45%] min-w-[400px] max-w-[800px] rounded-2xl bg-white shadow-2xl"
         onClick={handleModalClick}
       >
-        <div className="sticky top-0 rounded-t-2xl border-b bg-white px-6 py-4">
+        <div className="sticky top-0 z-10 rounded-t-2xl border-b bg-white px-6 py-4">
           <h2 className="text-xl font-semibold text-gray-800">전체 일정</h2>
           <button
             onClick={onClose}
@@ -43,15 +49,26 @@ export default function CalendarAllEventViewModal({
             &#10005;
           </button>
         </div>
-        <div className="h-[calc(100%-4rem)] overflow-y-auto px-6 py-4">
-          {data?.events.map((event) => (
-            <div
-              key={event.id}
-              className="mb-4 transform transition-all duration-200 last:mb-0 hover:-translate-y-1"
-            >
-              <CalendarEventCard event={event} />
-            </div>
-          ))}
+        <div
+          id="scrollableDiv"
+          className="h-[calc(100%-4rem)] overflow-y-auto px-6 py-4"
+        >
+          <InfiniteScroll
+            dataLength={allEvents.length}
+            next={fetchNextPage}
+            hasMore={hasNextPage ?? false}
+            loader={<div className="py-4 text-center">Loading...</div>}
+            scrollableTarget="scrollableDiv"
+          >
+            {allEvents.map((event) => (
+              <div
+                key={event.id}
+                className="mb-4 transform transition-all duration-200 last:mb-0 hover:-translate-y-1"
+              >
+                <CalendarEventCard event={event} />
+              </div>
+            ))}
+          </InfiniteScroll>
         </div>
       </div>
     </div>

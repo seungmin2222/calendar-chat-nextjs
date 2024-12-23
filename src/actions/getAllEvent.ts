@@ -1,7 +1,15 @@
 import { ResponseType } from '@/app/(calendar)/types/calendar';
 
-export const getAllEvent = async () => {
-  const url = `/events`;
+interface GetAllEventParams {
+  page?: number;
+  limit?: number;
+}
+
+export const getAllEvent = async ({
+  page = 1,
+  limit = 10,
+}: GetAllEventParams = {}) => {
+  const url = `/events?page=${page}&limit=${limit}`;
 
   try {
     const response = await fetch(url, {
