@@ -1,5 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Message } from '../types/chat';
+import FileBubble from './FileBubble';
 import IntroductionBubble from './IntroductionBubble';
 import TextBubble from './TextBubble';
 
@@ -28,6 +29,13 @@ export default function MessageBubbles({ messages }: MessageBubblesProps) {
           case 'introduction':
             return (
               <IntroductionBubble
+                key={message.id || `${message.sender}-${message.timestamp}`}
+                message={message}
+              />
+            );
+          case 'file':
+            return (
+              <FileBubble
                 key={message.id || `${message.sender}-${message.timestamp}`}
                 message={message}
               />

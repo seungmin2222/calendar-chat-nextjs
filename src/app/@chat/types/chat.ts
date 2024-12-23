@@ -18,4 +18,13 @@ export interface IntroductionMessage extends BaseMessage {
   telephone?: string;
 }
 
-export type Message = TextMessage | IntroductionMessage;
+export interface FileMessage extends BaseMessage {
+  type: 'file';
+  fileName: string;
+  fileSize: number;
+  fileType: string;
+  fileUrl: string;
+  fileData: string;
+}
+
+export type Message = TextMessage | IntroductionMessage | FileMessage;

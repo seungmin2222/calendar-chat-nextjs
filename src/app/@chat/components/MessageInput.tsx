@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { IntroductionMessage, Message } from '../types/chat';
+import { useRef, useState } from 'react';
+import { FileMessage, IntroductionMessage, Message } from '../types/chat';
 import IntroductionForm from './IntroductionForm';
 
 interface MessageInputProps {
@@ -14,21 +14,10 @@ export default function MessageInput({
   const [message, setMessage] = useState('');
   const [isComposing, setIsComposing] = useState(false);
   const [isIntroFormOpen, setIsIntroFormOpen] = useState(false);
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey && !isComposing) {
-      e.preventDefault();
-      handleSubmit(e);
-    }
-  };
-
-  const handleMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMessage(e.target.value);
-  };
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-
     if (!message.trim() || isComposing || !isConnected) return;
 
     const newMessage: Message = {
@@ -40,6 +29,58 @@ export default function MessageInput({
 
     onSendMessage(newMessage);
     setMessage('');
+  };
+
+  const handleMessageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMessage(e.target.value);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey && !isComposing) {
+      e.preventDefault();
+      handleSubmit(e);
+    }
+  };
+
+  const handleFileClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const MAX_FILE_SIZE = 5 * 1000 * 1000;
+
+    if (file.size > MAX_FILE_SIZE) {
+      alert('파일 크기는 5MB를 초과할 수 없습니다.');
+      return;
+    }
+
+    try {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const fileMessage: FileMessage = {
+          type: 'file',
+          fileName: file.name,
+          fileSize: file.size,
+          fileType: file.type,
+          fileUrl: URL.createObjectURL(file),
+          fileData: reader.result as string,
+          sender: 'me',
+          timestamp: new Date().toISOString(),
+        };
+        onSendMessage(fileMessage);
+      };
+      reader.readAsDataURL(file);
+
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    } catch (error) {
+      console.error('파일 처리 중 오류 발생:', error);
+      alert('파일 업로드에 실패했습니다.');
+    }
   };
 
   const handleSendIntroduction = (introMessage: IntroductionMessage) => {
@@ -63,6 +104,13 @@ export default function MessageInput({
           onCompositionStart={() => setIsComposing(true)}
           onCompositionEnd={() => setIsComposing(false)}
         />
+        <input
+          ref={fileInputRef}
+          type="file"
+          className="hidden"
+          onChange={handleFileChange}
+          accept="image/*,.pdf,.doc,.docx,.xls,.xlsx"
+        />
         <button
           type="button"
           onClick={() => setIsIntroFormOpen(true)}
@@ -72,6 +120,7 @@ export default function MessageInput({
         </button>
         <button
           type="button"
+          onClick={handleFileClick}
           className="absolute right-12 rounded-full p-1 duration-[400ms] hover:bg-blue-100"
         >
           📎
@@ -84,7 +133,6 @@ export default function MessageInput({
           📤
         </button>
       </form>
-
       <IntroductionForm
         isOpen={isIntroFormOpen}
         onClose={() => setIsIntroFormOpen(false)}
