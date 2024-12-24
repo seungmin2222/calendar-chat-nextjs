@@ -26,7 +26,7 @@ export default function FileBubble({ message }: FileBubbleProps) {
 
   const formatFileSize = (bytes: number) => {
     if (bytes < 1000) {
-      return bytes + ' B';
+      return bytes + ' byte';
     } else if (bytes < 1000000) {
       return (bytes / 1000).toFixed(1) + ' KB';
     } else {
@@ -51,15 +51,9 @@ export default function FileBubble({ message }: FileBubbleProps) {
             : 'rounded-bl-none bg-gray-300 text-black'
         }`}
       >
-        <a
-          href={message.fileUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          onClick={handleDownload}
-          className="flex cursor-pointer flex-col gap-2"
-        >
+        <div className="flex flex-col gap-2">
           {isImage && (
-            <div className="relative h-32 w-full overflow-hidden rounded">
+            <div className="relative h-52 w-full overflow-hidden rounded">
               <Image
                 src={message.fileUrl}
                 alt={message.fileName}
@@ -70,18 +64,42 @@ export default function FileBubble({ message }: FileBubbleProps) {
               />
             </div>
           )}
-          <div className="flex items-center gap-2">
-            <span className="select-none text-2xl">{getFileIcon()}</span>
-            <div className="flex flex-col overflow-hidden">
-              <span className="truncate whitespace-normal break-all font-medium">
+          <div className="flex items-center gap-3">
+            <div
+              className={`flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg ${
+                isMe ? 'bg-white/15' : 'bg-gray-400/10'
+              }`}
+            >
+              <span className="select-none text-xl">{getFileIcon()}</span>
+            </div>
+            <div className="flex flex-1 flex-col overflow-hidden">
+              <span className="truncate whitespace-normal break-all font-medium leading-tight">
                 {message.fileName}
               </span>
               <span className="select-none whitespace-normal break-all text-sm opacity-75">
                 {formatFileSize(message.fileSize)}
               </span>
             </div>
+            <button
+              onClick={handleDownload}
+              className={`group flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full transition-all duration-200 ${
+                isMe
+                  ? 'bg-white/20 hover:bg-white/30 active:bg-white/25'
+                  : 'bg-gray-500/10 hover:bg-gray-500/20 active:bg-gray-500/15'
+              }`}
+            >
+              <Image
+                src="/images/downloadIcon.png"
+                width={16}
+                height={16}
+                alt="Download"
+                className={`transition-transform duration-200 group-hover:-translate-y-[1px] group-active:translate-y-[1px] ${
+                  isMe ? 'opacity-90' : 'opacity-75'
+                }`}
+              />
+            </button>
           </div>
-        </a>
+        </div>
         <div className="mt-1 select-none text-xs opacity-70">
           {new Date(message.timestamp).toLocaleTimeString()}
         </div>
