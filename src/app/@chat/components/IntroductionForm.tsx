@@ -146,8 +146,14 @@ export default function IntroductionForm({
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black/50">
-      <div className="w-[400px] rounded-lg bg-white p-4">
+    <div
+      className="fixed inset-0 flex items-center justify-center bg-black/50"
+      onClick={handleClose}
+    >
+      <div
+        className="w-[400px] rounded-lg bg-white p-4"
+        onClick={(e) => e.stopPropagation()}
+      >
         <h2 className="mb-4 text-lg font-bold">소개 메시지 작성</h2>
         <form onSubmit={handleSubmit} className="space-y-3">
           <div>
