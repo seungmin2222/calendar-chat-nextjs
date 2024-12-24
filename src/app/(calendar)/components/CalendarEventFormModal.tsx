@@ -3,19 +3,19 @@ import useCreateEventByDate from '../hooks/useCreateEventByDate';
 import useUpdateEventByDate from '../hooks/useUpdateEventByDate';
 import { EventDataType } from '../types/calendar';
 
-interface CalendarEventModalProps {
+interface CalendarEventFormModalProps {
   onClose: () => void;
   mode: 'create' | 'update';
   defaultDate: string;
   defaultValues: EventDataType | null;
 }
 
-export default function CalendarEventModal({
+export default function CalendarEventFormModal({
   onClose,
   mode = 'create',
   defaultDate,
   defaultValues,
-}: CalendarEventModalProps) {
+}: CalendarEventFormModalProps) {
   const [date, setDate] = useState(
     mode === 'update'
       ? `${defaultValues?.year}-${String(defaultValues?.month).padStart(2, '0')}-${String(defaultValues?.day).padStart(2, '0')}`

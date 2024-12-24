@@ -3,7 +3,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { useGetEvents } from '../hooks/useGetEvents';
 import CalendarEventCard from './CalendarEventCard';
 
-interface ModalProps {
+interface CalendarAllEventViewModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
@@ -11,7 +11,7 @@ interface ModalProps {
 export default function CalendarAllEventViewModal({
   isOpen,
   onClose,
-}: ModalProps) {
+}: CalendarAllEventViewModalProps) {
   const { data, refetch, fetchNextPage, hasNextPage } = useGetEvents({
     limit: 10,
   });
@@ -33,7 +33,7 @@ export default function CalendarAllEventViewModal({
 
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
       onClick={onClose}
     >
       <div

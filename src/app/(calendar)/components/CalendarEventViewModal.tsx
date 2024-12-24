@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import useDeleteEventsByDate from '../hooks/useDeleteEventByDate';
 import { EventDataType } from '../types/calendar';
 
-interface ModalProps {
+interface CalendarEventViewModalProps {
   event: EventDataType;
   isOpen: boolean;
   onClose: () => void;
@@ -20,7 +20,7 @@ export default function CalendarEventViewModal({
   onEdit,
   year,
   month,
-}: ModalProps) {
+}: CalendarEventViewModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
 
   const onSuccessAction = () => {

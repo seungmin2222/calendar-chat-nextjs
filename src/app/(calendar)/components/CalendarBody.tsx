@@ -1,9 +1,9 @@
 import { ReactNode, useState } from 'react';
 import { EventDataType, ResponseType } from '../types/calendar';
 import CalendarDay from './CalendarDay';
-import CalendarEventModal from './CalendarEventModal';
+import CalendarEventModal from './CalendarEventFormModal';
+import CalendarEventViewModal from './CalendarEventViewModal';
 import CalendarGrid from './CalendarGrid';
-import CalendarEventViewModal from './CalendarViewModal';
 import CalendarWeekdaysHeader from './CalendarWeekdaysHeader';
 
 interface CalendarBodyProps {
