@@ -31,6 +31,16 @@ export default function IntroductionForm({
 
   if (!isOpen) return null;
 
+  const formatUrl = (url: string): string => {
+    const trimmedUrl = url.trim();
+    if (!trimmedUrl) return '';
+
+    const protocolRegex = /^https?:\/\//i;
+    return protocolRegex.test(trimmedUrl)
+      ? trimmedUrl
+      : `https://${trimmedUrl}`;
+  };
+
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
 
@@ -47,16 +57,17 @@ export default function IntroductionForm({
     }
 
     if (formData.websiteUrl.trim()) {
-      const urlRegex = /^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/[^\s]*)?$/;
+      const formattedUrl = formatUrl(formData.websiteUrl);
+      const urlRegex = /^https?:\/\/([\w-]+\.)+[\w-]{2,}(\/[^\s]*)?$/;
 
-      if (!urlRegex.test(formData.websiteUrl.trim())) {
+      if (!urlRegex.test(formattedUrl)) {
         newErrors.websiteUrl =
           '올바른 URL 형식이 아닙니다 (예: https://example.com)';
       }
     }
 
     if (!formData.telephone.trim()) {
-      newErrors.telephone = '전화번호를 입력해주세요';
+      newErrors.telephone = '"-" 없이 전화번호를 입력해주세요';
     } else {
       const telRegex = /^\d{2,4}\d{3,4}\d{4}$/;
       if (!telRegex.test(formData.telephone)) {
@@ -83,7 +94,10 @@ export default function IntroductionForm({
 
     const introMessage: IntroductionMessage = {
       type: 'introduction',
-      ...formData,
+      greeting: formData.greeting,
+      introduction: formData.introduction,
+      websiteUrl: formatUrl(formData.websiteUrl),
+      telephone: formData.telephone,
       sender: 'me',
       timestamp: new Date().toISOString(),
     };
