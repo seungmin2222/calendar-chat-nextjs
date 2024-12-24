@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import ErrorComponent from '../ErrorComponent';
+import Loading from '../LoadingComponent';
 import CalendarBody from './components/CalendarBody';
 import CalendarHeader from './components/CalendarHeader';
 import { useGetEventsByDate } from './hooks/useGetEventsByDate';
@@ -14,7 +16,15 @@ export default function Home() {
     month: currentDate.getMonth(),
   };
 
-  const { data } = useGetEventsByDate({ year, month });
+  const { data, isLoading, error, refetch } = useGetEventsByDate({
+    year,
+    month,
+  });
+
+  const errorMessage = error?.message || '일정을 불러오는데 실패했습니다';
+
+  if (isLoading) return <Loading />;
+  if (error) return <ErrorComponent message={errorMessage} onRetry={refetch} />;
 
   const handlePrevMonth = () => {
     setCurrentDate(new Date(year, month - 1, 1));

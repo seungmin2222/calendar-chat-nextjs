@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import ErrorComponent from '../../ErrorComponent';
+import Loading from '../../LoadingComponent';
 import { useGetEvents } from '../hooks/useGetEvents';
 import CalendarEventCard from './CalendarEventCard';
 
@@ -12,9 +14,10 @@ export default function CalendarAllEventViewModal({
   isOpen,
   onClose,
 }: CalendarAllEventViewModalProps) {
-  const { data, refetch, fetchNextPage, hasNextPage } = useGetEvents({
-    limit: 10,
-  });
+  const { data, isLoading, error, refetch, fetchNextPage, hasNextPage } =
+    useGetEvents({
+      limit: 10,
+    });
 
   useEffect(() => {
     if (isOpen) {
@@ -30,6 +33,8 @@ export default function CalendarAllEventViewModal({
 
   const pages = data?.pages || [];
   const allEvents = pages.flatMap((page) => page.events);
+
+  const errorMessage = error?.message || '일정을 불러오는데 실패했습니다';
 
   return (
     <div
@@ -53,22 +58,26 @@ export default function CalendarAllEventViewModal({
           id="scrollableDiv"
           className="h-[calc(100%-4rem)] overflow-y-auto px-6 py-4"
         >
-          <InfiniteScroll
-            dataLength={allEvents.length}
-            next={fetchNextPage}
-            hasMore={hasNextPage ?? false}
-            loader={<div className="py-4 text-center">Loading...</div>}
-            scrollableTarget="scrollableDiv"
-          >
-            {allEvents.map((event) => (
-              <div
-                key={event.id}
-                className="mb-4 transform transition-all duration-200 last:mb-0 hover:-translate-y-1"
-              >
-                <CalendarEventCard event={event} />
-              </div>
-            ))}
-          </InfiniteScroll>
+          {isLoading && <Loading />}
+          {error && <ErrorComponent message={errorMessage} onRetry={refetch} />}
+          {!isLoading && !error && (
+            <InfiniteScroll
+              dataLength={allEvents.length}
+              next={fetchNextPage}
+              hasMore={hasNextPage ?? false}
+              loader={<Loading />}
+              scrollableTarget="scrollableDiv"
+            >
+              {allEvents.map((event) => (
+                <div
+                  key={event.id}
+                  className="mb-4 transform transition-all duration-200 last:mb-0 hover:-translate-y-1"
+                >
+                  <CalendarEventCard event={event} />
+                </div>
+              ))}
+            </InfiniteScroll>
+          )}
         </div>
       </div>
     </div>
