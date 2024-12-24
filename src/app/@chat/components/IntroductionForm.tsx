@@ -186,7 +186,7 @@ export default function IntroductionForm({
               value={formData.introduction}
               onChange={handleChange}
               onBlur={() => handleBlur('introduction')}
-              className={`mt-1 w-full rounded-md border p-2 ${
+              className={`mt-1 h-32 w-full resize-none rounded-md border p-2 ${
                 touched.introduction && errors.introduction
                   ? 'border-red-500'
                   : 'border-gray-300'
