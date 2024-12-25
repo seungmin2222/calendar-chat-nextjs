@@ -51,7 +51,7 @@ React Query와 TypeScript를 활용한 상태관리, MSW를 통한 API 모킹, �
 
 1. **환경변수 설정**
 
-   - 프로젝트 최상위 디렉토리에 `.env.development` 파일을 생성하고 아래 내용을 추가하세요.
+   - 프로젝트 최상위 디렉토리에 `.env` 파일을 생성하고 아래 내용을 추가하세요.
      ```
      NEXT_PUBLIC_API_MOCKING=enabled
      ```
@@ -59,13 +59,15 @@ React Query와 TypeScript를 활용한 상태관리, MSW를 통한 API 모킹, �
 2. **의존성 설치**
    - 루트 폴더에서 실행합니다.
      ```
-     npm run install
+     npm install
      ```
 3. **실행**
    - 루트 폴더에서 실행합니다.
      ```
-     npm run start
+     npm run dev
      ```
+4. **애플리케이션 접속**
+   - 브라우저를 열고 [http://localhost:3000](http://localhost:3000)으로 접속하세요.
 
 ### 2-1) Docker로 실행하기
 
